@@ -265,15 +265,15 @@ if __name__ == "__main__":
     parser.add_argument('dataset_train', type=str, help='train dataset location')
     parser.add_argument('dataset_val', type=str, help='validation dataset location')
     parser.add_argument('model_name', type=str, help='Save model with this file name')
+
     args = parser.parse_args()
     print ("\n"+str(sys.argv)+"\n")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
     if args.gpu is not None:
-        if args.gpu[0] > torch.cuda.device_count() or args.gpu[0] < 0:
-            sys.exit(colored("\tERROR: gpu must be in the rang of [0:%i]"%(torch.cuda.device_count()),"red"))
-        torch.cuda.set_device(args.gpu[0])
+        if args.gpu >= torch.cuda.device_count() or args.gpu < 0:
+            sys.exit(colored("\tERROR: gpu must be in the rang of [0:%i]"%(torch.cuda.device_count()-1),"red"))
+        torch.cuda.set_device(args.gpu)
     else:
           device = auto_cuda()
           torch.cuda.set_device(device)
