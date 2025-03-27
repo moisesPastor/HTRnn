@@ -1,5 +1,6 @@
 pybind11
 numpy==1.24.1
+cuda_selector
 tqdm
 torch==1.13.1
 torchvision
