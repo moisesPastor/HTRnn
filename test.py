@@ -133,8 +133,8 @@ def test(model, htr_dataset, test_loader, device, bs=20, lmFile=None, beam=200, 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Testing a HTR model.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--lm-model', type=str, help='laguage model file (Arpa/Kenlm format)', default=None)
-    parser.add_argument('--beam-width', type=int, help='this sets up how broad the beam search is', default=200)
+    parser.add_argument('--lm_model', type=str, help='laguage model file (Arpa/Kenlm format)', default=None)
+    parser.add_argument('--beam_width', type=int, help='this sets up how broad the beam search is', default=200)
     parser.add_argument('--gsf', type=float, help='this sets up Grammar scale factor', default=1.0)
     parser.add_argument('--wip', type=float, help='this sets up Word insertion penalty', default=0.0)
     parser.add_argument('--batch_size', type=int, help='image batch-size', default=24)
