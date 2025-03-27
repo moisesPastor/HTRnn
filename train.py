@@ -10,9 +10,10 @@ import numpy as np
 #from torchvision.utils import save_image
 from multiprocessing import cpu_count
 from termcolor import colored
-import editdistance
 import fastwer
 import re
+from cuda_selector import auto_cuda
+
 
 # Local packages
 import procImg
@@ -252,14 +253,14 @@ def train(model, htr_dataset_train ,htr_dataset_val, device, epochs=20, batch_si
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run a model training process of using the given dataset.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--models-file', type=str, help='file with models name',required=False)
-    parser.add_argument('--data-augm', action='store_true', help='enable data augmentation', default=False)
-    parser.add_argument('--fixed-height', type=int, help='fixed image height', default=64)
+    parser.add_argument('--models_file', type=str, help='file with models name',required=False)
+    parser.add_argument('--data_augm', action='store_true', help='enable data augmentation', default=False)
+    parser.add_argument('--fixed_height', type=int, help='fixed image height', default=64)
     parser.add_argument('--epochs', type=int, help='number of epochs', default=20)
-    parser.add_argument('--early-stop', type=int, help='number of epochs without improving', default=10)
-    parser.add_argument('--batch-size', type=int, help='image batch-size', default=24)
-    parser.add_argument('--space-symbol', type=str, help='image batch-size', default='~')
-    parser.add_argument('--gpu', type=int, default=[0,1], nargs='+', help='used gpu')     
+    parser.add_argument('--early_stop', type=int, help='number of epochs without improving', default=10)
+    parser.add_argument('--batch_size', type=int, help='image batch-size', default=24)
+    parser.add_argument('--space_symbol', type=str, help='image batch-size', default='~')
+    parser.add_argument('--gpu', type=int, default=None, help='used gpu')
     parser.add_argument("--verbosity", action="store_true",  help="increase output verbosity",default=False)
     parser.add_argument('dataset_train', type=str, help='train dataset location')
     parser.add_argument('dataset_val', type=str, help='validation dataset location')
@@ -268,14 +269,14 @@ if __name__ == "__main__":
     print ("\n"+str(sys.argv)+"\n")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("DDDDDDDDDD")
-    print(device)
-    print("DDDDDDDDDD")
     
-    if args.gpu:
+    if args.gpu is not None:
         if args.gpu[0] > torch.cuda.device_count() or args.gpu[0] < 0:
             sys.exit(colored("\tERROR: gpu must be in the rang of [0:%i]"%(torch.cuda.device_count()),"red"))
         torch.cuda.set_device(args.gpu[0])
+    else:
+          device = auto_cuda()
+          torch.cuda.set_device(device)
 
     print("Selected GPU %i\n"%(torch.cuda.current_device()))
           
