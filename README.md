@@ -1,5 +1,6 @@
 # Handwritten Text Recognition with PyTorch
+This handwritten text recognition model implements CNN+LSTM with CTC loss and beam search CTC decoding. The ctcdecode library must be installed along with other required dependencies.
 
-This code was updated from the one at [https://github.com/pmuilu/ocr_crnn](https://github.com/pmuilu/ocr_crnn).
+If multiple GPUs are available, you can specify which one to use with --gpu NumGPU. If not specified, the program selects the GPU with the lowest memory usage.
 
-This model for *handwritten text recognition* implements CNN+LSTM with CTC loss and beam search CTC decoding. It is required to install [ctcdecode library](https://github.com/parlance/ctcdecode) along with other requirements. 
+During testing, if no language model is specified, the program does not use CTCBeamDecoder, improving response time by more than tenfold.
